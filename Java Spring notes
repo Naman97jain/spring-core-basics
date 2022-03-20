@@ -1,0 +1,136 @@
+Learnings:
+-----------------------------------------------------------------------------------------
+IoC - Inversion of Control
+IoC container does all the injection automatically using the 
+information mentioned in the config file or using some annotations.
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+Types of Injection:
+	- Property Injection (aka Setter Injection)
+		- Check package com.springcore.springcore for the implementation.
+		- Injections supported by Setter Injection: 
+			- Primitive types (String, int, double, char, boolean, short, byte, etc.)
+			- Collection types (Map, List, HashMap, Set, etc.)
+			- Object (or reference) types (Object of user defined class)
+		
+	- Constructor Injection
+		- Check package com.springcore.sprincore.ci for the implementation.
+		- Injections supported by Constructor Injection: 
+			- Primitive types (String, int, double, char, boolean, short, byte, etc.)
+			- Collection types (Map, List, Hashmap, Set, etc.)
+			- Object (or reference) types (Object of user defined class)
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+Bean LifeCycle:
+	- Using config.xml file 
+		- writing name of init method and destroy method as bean tag attributes
+	- Using interfaces 
+		- Implement Initializing interface for init method 
+			[define the function afterPropertiesSet()]
+		- Implement Disposable interface for destroy method
+			[define the function destroy()]
+	Using annotations:
+		- @PostConstruct annotation for init method.
+			- See implementation in com.springcore.springcore.lifecycle.Example class.
+		- @PreDestroy annotation for destroy method.
+			- See implementation in com.springcore.springcore.lifecycle.Example class.
+		Note:
+			For seeing the effect of annotations you need to 
+			enable the annotation from the config.xml file.
+			Ways to enable the annotations through config.xml file:
+				- Using <context:annotation-config /> in the config.xml file.
+				  [This will enable all the annotaions written in the classes.]
+				  For the above tag to work you need to add following lines in <beans>:
+					- xmlns:context="http://www.springframework.org/schema/context"
+					- http://www.springframework.org/schema/context
+  					  http://www.springframework.org/schema/context/spring-context-3.0.xsd>
+				- Using <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor />
+				  [This will only enable @PostConstruct and @PreDestroy annotations]
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+Autowiring:
+	- To inject object dependency implicitly
+	- Ways to perform autowiring:
+		- Using config.xml file
+		  	[Check package com.springcore.springcore.autowire]
+		- Using annotation [@Autowired]
+			[Check package com.springcore.springcore.autowire.annotaion]
+			For seeing the effect of annotation, you need to enable the annotation
+			from config.xml file putting tag <context:annotation-config /> in config.xml file. 
+		- @Autowired can be put on the:
+			- Property Declaration  [byType]
+			- Setter Method         [byType]
+			- Constructor           [constructor]
+		- @Qualifier(<bean-name>) can be put below @Autowired to autowire using byName.
+		  [Check package com.springcore.springcore.autowire.annotaion]
+		  [It is only allowed at property and setter function. One can not use it on constructor.]
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+StandAlone collections:
+	- Kind of a global collection object to be used in multiple beans.
+	- created using util schema in the config.xml file
+	- Check com.springcore.springcore.standaloneColl package for the implementation
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+Stereotype annotations:
+	- Use of @Component annotation to tell the spring whose object needs to be created at run time.
+	- No need of <bean> tag in config.xml file if use @Component annotation
+	- <context:component-scan base-package="<package-name>" /> tag is used to check for @Component annotations.
+	- Name of the bean will be automatically assumed as camelCase of the class name for which bean is being created.
+		or at which the @Component tag is put.
+	- If you want to give a custom name to bean then instead of just writing @Component, write @Component("<custom-name>")
+	- Now in context.getBean("<use-the-custom-name>") for getting the bean.
+	- For providing values to Object created by Spring at run time @Value annotation is used.
+	- Check com.springcore.springcore.stereotype package for the implementation.
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+Bean Scope:
+	- Singleton [Always gives the SAME object reference whenever the bean is fetched.] (Default scope) 
+	- Prototype [Always gives the NEW object reference whenever the bean is fetched.]
+	- Request
+	- Session
+	- GlobalSession
+	Note: Check com.springcore.springcore.checkScope package for implementation.
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+Spring Expression Language
+	- You can use expressions in the @Value annotation
+	- Supported expressions are:
+		- Normal evaluation expression -> example -> 11 + 22
+		- Invoking a class's static method
+		- Getting the value of class's static variable
+		- Creating a new object of the class and assigning the result as the value.
+	- Check package com.springcore.springcore.spel for the implementation.
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+Eliminating XML Completely:
+	- Beans can be created using the @Component tag over the classes whose beans you want to create.
+	- The IoC container will fetch the configurations from any (but only one) java class having 
+	  @Configuration above it. 
+	- For the component scan thing we have to use the @ComponentScan annotation below the @Configuration
+	  annotation on the configuration class. 
+	- So now IoC container knows it need to look for the classes having @Component tag on them in the
+	  base package mentioned by @ComponentScan annotation over configuration java class with @Configuration
+	  annotation.
+	- Check package com.springcore.springcore.eliminationXML for the implementation.
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+Elimination of @Component from Java classes:
+	- All the bean configurations can be done in a single Java class without putting @Component on every class.
+	- The Java configuration class can have any name.
+	- It will be distinguished/identified by IoC container as it will have @Configuration annotation on it.
+	- This class will contain functions returning objects that will be used as beans in the run time.
+	- All the functions that will act as beans in the application will be annotated by the @Bean annotation.
+	- So, now IoC container will first go to the Configuration class, then it will manage the objects
+	  returned by member functions of this class with @Bean annotation.
+	- IoC container will create the beans of all these objects with the function name.
+	- If you want to change the name of the bean, then you can use the name attribute of the @Bean annotation.
+	- Check package com.springcore.springcore.eliminationComponent for the implementation.
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+
+
+		
+		
+		
+	 	
